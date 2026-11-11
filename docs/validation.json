@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-11",
+  "environment": {
+    "os": "Windows",
+    "python": "3.12.13",
+    "node": "22.20.0"
+  },
+  "backend": {
+    "passed": 22,
+    "failures": 0,
+    "coverage_percent": 95.4
+  },
+  "browser": {
+    "passed": 2,
+    "engine": "Chromium",
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "result_state_mobile_overflow_checked": true
+  },
+  "typescript_build": "passed",
+  "ruff": "passed",
+  "live_model_inference": "not run; no model installed",
+  "docker": "local daemon unavailable; CI verifies image"
+}

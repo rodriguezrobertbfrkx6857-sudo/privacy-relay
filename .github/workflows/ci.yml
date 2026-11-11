@@ -1,0 +1,32 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.8"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: uv sync --frozen
+      - run: uv run ruff check app tests
+      - run: uv run pytest --cov=app --cov-report=term-missing
+      - run: npm ci && npm run build
+        working-directory: web
+      - run: npx playwright install --with-deps chromium
+        working-directory: web
+      - run: npm run test:e2e
+        working-directory: web
+      - run: docker build -t workbench-ci .
+      - run: |
+          docker run -d --name workbench-smoke -p 127.0.0.1:8311:8000 workbench-ci
+          for i in $(seq 1 20); do curl --fail http://127.0.0.1:8311/api/health && exit 0; sleep 1; done
+          docker logs workbench-smoke
+          exit 1
