@@ -22,3 +22,5 @@ A Starlette warning notes future migration from httpx to httpx2 for TestClient; 
 Tests exercise real domain logic and API behavior, including negative cases. Browser tests execute built frontend assets against a real FastAPI server. They do not measure broad model safety, unseen attack generalization or production capacity.
 
 A fresh-database concurrent audit test covers the SQLite WAL initialization race found during live HTTP integration. After fixing initialization, the paired Sentinel service experiment completed all 36 cases without target errors.
+
+CI uses the preinstalled Chrome channel on Ubuntu 24.04; local checks use Playwright Chromium. The same workflow and mobile assertions run in both. Browser provisioning is checked with `google-chrome --version`, and each CI job has a 15-minute timeout.

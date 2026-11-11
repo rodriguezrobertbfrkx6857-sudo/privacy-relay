@@ -4,7 +4,8 @@ permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -20,10 +21,11 @@ jobs:
       - run: uv run pytest --cov=app --cov-report=term-missing
       - run: npm ci && npm run build
         working-directory: web
-      - run: npx playwright install --with-deps chromium
-        working-directory: web
+      - run: google-chrome --version
       - run: npm run test:e2e
         working-directory: web
+        env:
+          PLAYWRIGHT_CHANNEL: chrome
       - run: docker build -t workbench-ci .
       - run: |
           docker run -d --name workbench-smoke -p 127.0.0.1:8311:8000 workbench-ci
